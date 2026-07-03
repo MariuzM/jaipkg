@@ -5,7 +5,7 @@ import { formatRelativeDate } from '#/lib/format'
 import { getPackages, getStats } from '#/server/packages'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-const POPULAR_TOPICS = ['gamedev', 'bindings', 'graphics', 'simd', 'cli']
+const POPULAR_TOPICS = ['gamedev', 'bindings', 'graphics', 'simd', 'cli', 'http']
 
 export const Route = createFileRoute('/')({
   loader: async () => {
