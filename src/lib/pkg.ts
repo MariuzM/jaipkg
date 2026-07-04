@@ -1,8 +1,6 @@
-import type { Package } from './types'
+import type { Package, PackageKind } from './types'
 
-export type PackageKind = 'library' | 'binding' | 'tool' | 'app'
-
-export const deriveKind = (pkg: Package): PackageKind => {
+export const deriveKind = (pkg: Pick<Package, 'name' | 'description' | 'topics'>): PackageKind => {
   const hay = `${pkg.name} ${pkg.description ?? ''} ${pkg.topics.join(' ')}`.toLowerCase()
   if (/(binding|bindings|wrapper|ffi|-sys\b)/.test(hay)) return 'binding'
   if (/(\bcli\b|tool|tooling|compiler|linter|formatter|language-server|lsp)/.test(hay))

@@ -1,7 +1,7 @@
 import { formatNumber, formatRelativeDate } from '#/lib/format'
-import { deriveKind, kindStyle, ownerInitial } from '#/lib/pkg'
+import { kindStyle, ownerInitial } from '#/lib/pkg'
 import type { Package } from '#/lib/types'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 import { IconStar } from './Icons'
 
@@ -10,8 +10,9 @@ type Props = {
 }
 
 export const PackageRow = ({ pkg }: Props) => {
-  const kind = deriveKind(pkg)
+  const kind = pkg.kind
   const ks = kindStyle[kind]
+  const navigate = useNavigate()
 
   return (
     <Link
@@ -27,12 +28,18 @@ export const PackageRow = ({ pkg }: Props) => {
               {pkg.version ?? pkg.license}
             </span>
           )}
-          <span
-            className="shrink-0 rounded-[5px] px-1.75 py-0.5 font-mono text-[9.5px] font-semibold tracking-[0.05em] uppercase"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              navigate({ to: '/packages', search: { kind, sort: 'stars' } })
+            }}
+            className="shrink-0 cursor-pointer rounded-[5px] px-1.75 py-0.5 font-mono text-[9.5px] font-semibold tracking-[0.05em] uppercase transition-opacity hover:opacity-80"
             style={{ color: ks.color, background: ks.bg }}
           >
             {kind}
-          </span>
+          </button>
         </div>
         <span className="text-tx2 flex shrink-0 items-center gap-0.75 font-mono text-[12.5px] font-semibold">
           <IconStar size={12} className="text-tx2" />

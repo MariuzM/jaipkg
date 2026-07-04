@@ -9,7 +9,7 @@ import type {
   SortKey,
   Stats,
 } from '#/lib/types'
-import { and, asc, count, desc, ilike, or, sql } from 'drizzle-orm'
+import { and, asc, count, desc, eq, ilike, or, sql } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import {
@@ -36,6 +36,7 @@ const columns = {
   license: packages.license,
   topics: packages.topics,
   language: packages.language,
+  kind: packages.kind,
   pushedAt: packages.pushedAt,
   repoCreatedAt: packages.repoCreatedAt,
   repoUpdatedAt: packages.repoUpdatedAt,
@@ -65,6 +66,7 @@ const rowToPackage = (r: PackageColumns): Package => ({
   license: r.license,
   topics: r.topics,
   language: r.language,
+  kind: r.kind as Package['kind'],
   pushedAt: r.pushedAt.toISOString(),
   createdAt: r.repoCreatedAt.toISOString(),
   updatedAt: r.repoUpdatedAt.toISOString(),
@@ -100,13 +102,17 @@ export const getPackages = createServerFn({ method: 'GET' })
     const db = getDb()
 
     if (db && (await hasRows(db))) {
-      const where = term
-        ? or(
-            ilike(packages.name, `%${term}%`),
-            ilike(packages.description, `%${term}%`),
-            ilike(packages.owner, `%${term}%`),
-          )
-        : undefined
+      const filters = [
+        term
+          ? or(
+              ilike(packages.name, `%${term}%`),
+              ilike(packages.description, `%${term}%`),
+              ilike(packages.owner, `%${term}%`),
+            )
+          : undefined,
+        data.kind ? eq(packages.kind, data.kind) : undefined,
+      ].filter(Boolean)
+      const where = filters.length ? and(...filters) : undefined
 
       const [items, [totalRow]] = await Promise.all([
         db

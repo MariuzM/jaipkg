@@ -1,3 +1,4 @@
+import { deriveKind } from '#/lib/pkg'
 import type { Package, PackageQuery, Release } from '#/lib/types'
 import { ulid } from 'ulid'
 
@@ -92,30 +93,36 @@ export type GhRepo = {
   owner: { login: string; avatar_url: string }
 }
 
-export const mapRepo = (r: GhRepo): Package => ({
-  id: ulid(),
-  githubId: r.id,
-  version: null,
-  name: r.name,
-  owner: r.owner.login,
-  fullName: r.full_name,
-  description: r.description,
-  url: r.html_url,
-  homepage: r.homepage && r.homepage.trim() ? r.homepage : null,
-  stars: r.stargazers_count,
-  forks: r.forks_count,
-  openIssues: r.open_issues_count,
-  watchers: r.watchers_count,
-  license: r.license?.spdx_id && r.license.spdx_id !== 'NOASSERTION' ? r.license.spdx_id : null,
-  topics: r.topics ?? [],
-  language: r.language,
-  pushedAt: r.pushed_at,
-  createdAt: r.created_at,
-  updatedAt: r.updated_at,
-  ownerAvatar: r.owner.avatar_url,
-  archived: r.archived,
-  defaultBranch: r.default_branch,
-})
+export const mapRepo = (r: GhRepo): Package => {
+  const name = r.name
+  const description = r.description
+  const topics = r.topics ?? []
+  return {
+    id: ulid(),
+    githubId: r.id,
+    version: null,
+    name,
+    owner: r.owner.login,
+    fullName: r.full_name,
+    description,
+    url: r.html_url,
+    homepage: r.homepage && r.homepage.trim() ? r.homepage : null,
+    stars: r.stargazers_count,
+    forks: r.forks_count,
+    openIssues: r.open_issues_count,
+    watchers: r.watchers_count,
+    license: r.license?.spdx_id && r.license.spdx_id !== 'NOASSERTION' ? r.license.spdx_id : null,
+    topics,
+    language: r.language,
+    kind: deriveKind({ name, description, topics }),
+    pushedAt: r.pushed_at,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+    ownerAvatar: r.owner.avatar_url,
+    archived: r.archived,
+    defaultBranch: r.default_branch,
+  }
+}
 
 const sortParam = (sort: PackageQuery['sort']) => {
   switch (sort) {

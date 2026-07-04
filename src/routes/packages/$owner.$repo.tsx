@@ -6,7 +6,7 @@ import {
   IconStar,
 } from '#/components/Icons'
 import { formatNumber, formatRelativeDate } from '#/lib/format'
-import { deriveKind, isMaintained, kindStyle } from '#/lib/pkg'
+import { isMaintained, kindStyle } from '#/lib/pkg'
 import type { PackageDetail } from '#/lib/types'
 import { getPackage } from '#/server/packages'
 import { useState } from 'react'
@@ -44,7 +44,7 @@ function PackagePage() {
   const pkg = Route.useLoaderData()
   const [tab, setTab] = useState<Tab>('readme')
 
-  const kind = deriveKind(pkg)
+  const kind = pkg.kind
   const ks = kindStyle[kind]
   const version = pkg.version
 
@@ -70,12 +70,14 @@ function PackagePage() {
                 {version}
               </span>
             )}
-            <span
-              className="rounded-[6px] px-2 py-0.75 font-mono text-[10px] font-semibold tracking-[0.05em] uppercase"
+            <Link
+              to="/packages"
+              search={{ kind, sort: 'stars' }}
+              className="rounded-[6px] px-2 py-0.75 font-mono text-[10px] font-semibold tracking-[0.05em] uppercase transition-opacity hover:opacity-80"
               style={{ color: ks.color, background: ks.bg }}
             >
               {kind}
-            </span>
+            </Link>
             {pkg.archived && (
               <span className="bg-chip text-mut inline-flex items-center gap-1.25 rounded-[6px] px-2 py-0.75 font-mono text-[10px] font-semibold tracking-[0.05em] uppercase">
                 <IconArchive size={11} /> archived

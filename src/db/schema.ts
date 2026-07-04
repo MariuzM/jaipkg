@@ -23,6 +23,7 @@ export const packages = pgTable(
     license: text('license'),
     topics: jsonb('topics').$type<Array<string>>().notNull().default([]),
     language: text('language'),
+    kind: text('kind').notNull().default('library'),
     pushedAt: timestamp('pushed_at', { withTimezone: true }).notNull(),
     repoCreatedAt: timestamp('repo_created_at', { withTimezone: true }).notNull(),
     repoUpdatedAt: timestamp('repo_updated_at', { withTimezone: true }).notNull(),
@@ -37,6 +38,7 @@ export const packages = pgTable(
     index('packages_stars_idx').on(t.stars),
     index('packages_pushed_idx').on(t.pushedAt),
     index('packages_owner_idx').on(t.owner),
+    index('packages_kind_idx').on(t.kind),
   ],
 )
 

@@ -1,3 +1,5 @@
+export type PackageKind = 'library' | 'binding' | 'tool' | 'app'
+
 export type Package = {
   id: string
   githubId: number
@@ -15,6 +17,7 @@ export type Package = {
   license: string | null
   topics: Array<string>
   language: string | null
+  kind: PackageKind
   pushedAt: string
   createdAt: string
   updatedAt: string
@@ -41,6 +44,7 @@ export type SortKey = 'stars' | 'updated' | 'created' | 'name'
 
 export type PackageQuery = {
   q?: string
+  kind?: PackageKind
   sort?: SortKey
   page?: number
   perPage?: number

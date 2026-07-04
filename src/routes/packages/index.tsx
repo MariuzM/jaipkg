@@ -8,13 +8,14 @@ import {
 import { PackageCard } from '#/components/PackageCard'
 import { PackageRow } from '#/components/PackageRow'
 import { SearchBar } from '#/components/SearchBar'
-import type { SortKey } from '#/lib/types'
+import type { PackageKind, SortKey } from '#/lib/types'
 import { getPackages } from '#/server/packages'
 import { useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 type PackagesSearch = {
   q?: string
+  kind?: PackageKind
   sort?: SortKey
   page?: number
 }
@@ -26,13 +27,20 @@ const SORTS: Array<{ value: SortKey; label: string }> = [
   { value: 'name', label: 'Name A–Z' },
 ]
 
-const CATEGORIES: Array<{ label: string; q?: string }> = [
-  { label: 'All packages', q: undefined },
-  { label: 'Libraries', q: 'library' },
-  { label: 'Bindings', q: 'bindings' },
-  { label: 'Tools', q: 'tool' },
-  { label: 'Applications', q: 'app' },
+const CATEGORIES: Array<{ label: string; kind?: PackageKind }> = [
+  { label: 'All packages', kind: undefined },
+  { label: 'Libraries', kind: 'library' },
+  { label: 'Bindings', kind: 'binding' },
+  { label: 'Tools', kind: 'tool' },
+  { label: 'Applications', kind: 'app' },
 ]
+
+const KIND_LABELS: Record<PackageKind, string> = {
+  library: 'libraries',
+  binding: 'bindings',
+  tool: 'tools',
+  app: 'applications',
+}
 
 const TOPICS = ['graphics', 'gamedev', 'net', 'cli', 'simd', 'wasm', 'parser', 'math']
 
@@ -42,8 +50,11 @@ export const Route = createFileRoute('/packages/')({
   validateSearch: (search: Record<string, unknown>): PackagesSearch => {
     const sort = search.sort as SortKey
     const valid: Array<SortKey> = ['stars', 'updated', 'created', 'name']
+    const kind = search.kind as PackageKind
+    const validKinds: Array<PackageKind> = ['library', 'binding', 'tool', 'app']
     return {
       q: typeof search.q === 'string' && search.q ? search.q : undefined,
+      kind: validKinds.includes(kind) ? kind : undefined,
       sort: valid.includes(sort) ? sort : undefined,
       page: Number(search.page) > 1 ? Number(search.page) : undefined,
     }
@@ -51,7 +62,13 @@ export const Route = createFileRoute('/packages/')({
   loaderDeps: ({ search }) => search,
   loader: async ({ deps }) =>
     getPackages({
-      data: { q: deps.q, sort: deps.sort ?? 'stars', page: deps.page ?? 1, perPage: PER_PAGE },
+      data: {
+        q: deps.q,
+        kind: deps.kind,
+        sort: deps.sort ?? 'stars',
+        page: deps.page ?? 1,
+        perPage: PER_PAGE,
+      },
     }),
   component: PackagesPage,
 })
@@ -75,12 +92,12 @@ function PackagesPage() {
         <aside className="top-20 hidden flex-col gap-6 lg:sticky lg:flex">
           <FilterGroup title="Category">
             {CATEGORIES.map((c) => {
-              const active = (search.q ?? undefined) === c.q
+              const active = (search.kind ?? undefined) === c.kind
               return (
                 <Link
                   key={c.label}
                   to="/packages"
-                  search={{ q: c.q, sort }}
+                  search={{ kind: c.kind, sort }}
                   className={`flex items-center gap-2.25 rounded-[8px] px-2.5 py-2 font-sans text-[13px] transition-colors ${
                     active
                       ? 'bg-accsoft text-tx font-semibold'
@@ -116,7 +133,7 @@ function PackagesPage() {
                 <Link
                   key={o.value}
                   to="/packages"
-                  search={{ q: search.q, sort: o.value }}
+                  search={{ q: search.q, kind: search.kind, sort: o.value }}
                   className={`rounded-[8px] px-2.5 py-1.75 font-sans text-[13px] transition-colors ${
                     active
                       ? 'bg-accsoft text-acc2 font-semibold'
@@ -167,7 +184,9 @@ function PackagesPage() {
         <div>
           <div className="mb-3.5 flex items-baseline justify-between gap-3">
             <div className="text-mut font-sans text-[13.5px]">
-              <span className="text-tx font-bold">{data.total.toLocaleString()} packages</span>
+              <span className="text-tx font-bold">
+                {data.total.toLocaleString()} {search.kind ? KIND_LABELS[search.kind] : 'packages'}
+              </span>
               {search.q && (
                 <>
                   {' '}
@@ -222,7 +241,13 @@ function PackagesPage() {
 
           {totalPages > 1 && (
             <div className="mt-8 flex items-center justify-center gap-2">
-              <PageLink to={Math.max(1, page - 1)} disabled={page <= 1} q={search.q} sort={sort}>
+              <PageLink
+                to={Math.max(1, page - 1)}
+                disabled={page <= 1}
+                q={search.q}
+                kind={search.kind}
+                sort={sort}
+              >
                 <IconChevronLeft size={16} />
               </PageLink>
               <span className="text-fai px-3 font-mono text-[12.5px]">
@@ -232,6 +257,7 @@ function PackagesPage() {
                 to={Math.min(totalPages, page + 1)}
                 disabled={page >= totalPages}
                 q={search.q}
+                kind={search.kind}
                 sort={sort}
               >
                 <IconChevronRight size={16} />
@@ -281,14 +307,15 @@ type PageLinkProps = {
   to: number
   disabled: boolean
   q?: string
+  kind?: PackageKind
   sort: SortKey
   children: React.ReactNode
 }
 
-const PageLink = ({ to, disabled, q, sort, children }: PageLinkProps) => (
+const PageLink = ({ to, disabled, q, kind, sort, children }: PageLinkProps) => (
   <Link
     to="/packages"
-    search={{ q, sort, page: to > 1 ? to : undefined }}
+    search={{ q, kind, sort, page: to > 1 ? to : undefined }}
     aria-disabled={disabled}
     className="border-chipbd bg-chip text-mut hover:text-tx flex size-8 items-center justify-center rounded-[8px] border transition-colors aria-disabled:pointer-events-none aria-disabled:opacity-40"
   >
