@@ -227,18 +227,6 @@ const Sidebar = ({ pkg, kind }: { pkg: PackageDetail; kind: string }) => {
 
   return (
     <aside className="border-bd bg-card top-20 flex flex-col overflow-hidden rounded-[12px] border lg:sticky">
-      <div className="border-bd2 border-b p-4">
-        <div className="text-fai mb-2.5 font-mono text-[10px] font-bold tracking-[0.07em] uppercase">
-          Popularity
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="text-tx font-mono text-[22px] font-bold">
-            {formatNumber(pkg.stars)}
-            <span className="text-fai font-sans text-[12px] font-medium"> stars</span>
-          </div>
-        </div>
-      </div>
-
       <div className="flex flex-col gap-2.75 px-4 py-3.5">
         <MetaRow label="Version">
           <span className="font-mono text-[12px]">{pkg.version ?? '—'}</span>
