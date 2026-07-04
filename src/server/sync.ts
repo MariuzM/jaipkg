@@ -1,8 +1,9 @@
-import { getDb } from '#/db'
-import { packages } from '#/db/schema'
-import type { NewPackageRow } from '#/db/schema'
-import type { Package } from '#/lib/types'
 import { sql } from 'drizzle-orm'
+
+import { getDb } from '@/db'
+import { packages } from '@/db/schema'
+import type { NewPackageRow } from '@/db/schema'
+import type { Package } from '@/lib/types'
 
 import { fetchLatestVersion, GITHUB_SEARCH_LIMIT, searchReposPage } from './github-source'
 import type { GhError } from './github-source'

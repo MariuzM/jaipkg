@@ -1,17 +1,18 @@
+import { useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+
 import {
   IconCheck,
   IconChevronLeft,
   IconChevronRight,
   IconGrid,
   IconList,
-} from '#/components/Icons'
-import { PackageCard } from '#/components/PackageCard'
-import { PackageRow } from '#/components/PackageRow'
-import { SearchBar } from '#/components/SearchBar'
-import type { PackageKind, SortKey } from '#/lib/types'
-import { getPackages } from '#/server/packages'
-import { useState } from 'react'
-import { createFileRoute, Link } from '@tanstack/react-router'
+} from '@/components/Icons'
+import { PackageCard } from '@/components/PackageCard'
+import { PackageRow } from '@/components/PackageRow'
+import { SearchBar } from '@/components/SearchBar'
+import type { PackageKind, SortKey } from '@/lib/types'
+import { getPackages } from '@/server/packages'
 
 type PackagesSearch = {
   q?: string

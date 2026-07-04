@@ -1,6 +1,7 @@
-import { formatNumber } from '#/lib/format'
-import type { Stats } from '#/lib/types'
 import type { ReactNode } from 'react'
+
+import { formatNumber } from '@/lib/format'
+import type { Stats } from '@/lib/types'
 
 type Props = {
   stats: Stats

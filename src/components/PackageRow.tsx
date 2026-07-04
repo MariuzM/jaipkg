@@ -1,7 +1,8 @@
-import { formatNumber, formatRelativeDate } from '#/lib/format'
-import { kindStyle, ownerInitial } from '#/lib/pkg'
-import type { Package } from '#/lib/types'
 import { Link, useNavigate } from '@tanstack/react-router'
+
+import { formatNumber, formatRelativeDate } from '@/lib/format'
+import { kindStyle, ownerInitial } from '@/lib/pkg'
+import type { Package } from '@/lib/types'
 
 import { IconStar } from './Icons'
 

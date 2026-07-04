@@ -1,6 +1,7 @@
-import { deriveKind } from '#/lib/pkg'
-import type { Package, PackageQuery, Release } from '#/lib/types'
 import { ulid } from 'ulid'
+
+import { deriveKind } from '@/lib/pkg'
+import type { Package, PackageQuery, Release } from '@/lib/types'
 
 const GITHUB_API = 'https://api.github.com'
 export const JAI_QUALIFIER = 'language:Jai fork:false'

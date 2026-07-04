@@ -1,16 +1,17 @@
+import { useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+
 import {
   IconArchive,
   IconCheckCircle,
   IconExternalLink,
   IconGithub,
   IconStar,
-} from '#/components/Icons'
-import { formatNumber, formatRelativeDate } from '#/lib/format'
-import { isMaintained, kindStyle } from '#/lib/pkg'
-import type { PackageDetail } from '#/lib/types'
-import { getPackage } from '#/server/packages'
-import { useState } from 'react'
-import { createFileRoute, Link } from '@tanstack/react-router'
+} from '@/components/Icons'
+import { formatNumber, formatRelativeDate } from '@/lib/format'
+import { isMaintained, kindStyle } from '@/lib/pkg'
+import type { PackageDetail } from '@/lib/types'
+import { getPackage } from '@/server/packages'
 
 export const Route = createFileRoute('/packages/$owner/$repo')({
   loader: ({ params }) => getPackage({ data: params }),

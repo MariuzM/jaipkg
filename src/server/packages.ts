@@ -1,6 +1,9 @@
-import { getDb } from '#/db'
-import type { PackageRow } from '#/db/schema'
-import { packages } from '#/db/schema'
+import { and, asc, count, desc, eq, ilike, or, sql } from 'drizzle-orm'
+import { createServerFn } from '@tanstack/react-start'
+
+import { getDb } from '@/db'
+import type { PackageRow } from '@/db/schema'
+import { packages } from '@/db/schema'
 import type {
   Package,
   PackageDetail,
@@ -8,9 +11,7 @@ import type {
   PackageQuery,
   SortKey,
   Stats,
-} from '#/lib/types'
-import { and, asc, count, desc, eq, ilike, or, sql } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
+} from '@/lib/types'
 
 import {
   fetchLatestVersion,

@@ -1,4 +1,4 @@
-import { syncPackages } from "#/server/sync"
+import { syncPackages } from "@/server/sync"
 
 const maxPagesPerQuery = process.env.SYNC_PAGES
   ? Number(process.env.SYNC_PAGES)

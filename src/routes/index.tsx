@@ -1,9 +1,10 @@
-import { PackageCard } from '#/components/PackageCard'
-import { SearchBar } from '#/components/SearchBar'
-import { StatsStrip } from '#/components/StatsStrip'
-import { formatRelativeDate } from '#/lib/format'
-import { getPackages, getStats } from '#/server/packages'
 import { createFileRoute, Link } from '@tanstack/react-router'
+
+import { PackageCard } from '@/components/PackageCard'
+import { SearchBar } from '@/components/SearchBar'
+import { StatsStrip } from '@/components/StatsStrip'
+import { formatRelativeDate } from '@/lib/format'
+import { getPackages, getStats } from '@/server/packages'
 
 const POPULAR_TOPICS = ['gamedev', 'bindings', 'graphics', 'simd', 'cli', 'http']
 

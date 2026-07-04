@@ -1,6 +1,7 @@
-import type { Release } from '#/lib/types'
 import { boolean, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { ulid } from 'ulid'
+
+import type { Release } from '@/lib/types'
 
 export const packages = pgTable(
   'packages',

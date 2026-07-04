@@ -23,7 +23,7 @@ export const Route = createFileRoute('/api/sync')({
 
         running = true
         try {
-          const { syncPackages } = await import('#/server/sync')
+          const { syncPackages } = await import('@/server/sync')
           const count = await syncPackages()
           lastRunAt = new Date().toISOString()
           return json({ ok: true, count, lastRunAt })
