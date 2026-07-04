@@ -21,10 +21,6 @@ export const Hero = () => (
         <br />
         Jai dependency
       </h1>
-      <p className="text-mut mx-auto max-w-[500px] font-sans text-[16.5px] leading-[1.5]">
-        Curated Jai libraries, tools, and bindings — with activity, versions, and health at a
-        glance.
-      </p>
       <div className="mx-auto mt-7.5 max-w-[600px]">
         <SearchBar autofocus />
       </div>
