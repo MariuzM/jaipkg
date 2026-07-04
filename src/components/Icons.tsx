@@ -56,6 +56,13 @@ export const IconStar = ({ size = 12, ...props }: IconProps) => (
   </svg>
 )
 
+export const IconClock = ({ size = 12, ...props }: IconProps) => (
+  <svg {...stroke(size, props)}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3.5 2" />
+  </svg>
+)
+
 export const IconExternalLink = ({ size = 13, ...props }: IconProps) => (
   <svg {...stroke(size, props)} strokeWidth={2.2}>
     <path d="M15 3h6v6" />
