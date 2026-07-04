@@ -227,6 +227,26 @@ const Sidebar = ({ pkg, kind }: { pkg: PackageDetail; kind: string }) => {
 
   return (
     <aside className="border-bd bg-card top-20 flex flex-col overflow-hidden rounded-[12px] border lg:sticky">
+      <a
+        href={`https://github.com/${pkg.owner}`}
+        target="_blank"
+        rel="noreferrer"
+        className="border-bd2 hover:bg-chip flex items-center gap-2.75 border-b px-4 py-3.5 transition-colors"
+      >
+        <img
+          src={pkg.ownerAvatar}
+          alt={pkg.owner}
+          width={36}
+          height={36}
+          className="border-bd rounded-full border"
+        />
+        <div className="flex min-w-0 flex-col">
+          <span className="text-tx truncate font-sans text-[13.5px] font-semibold">
+            {pkg.owner}
+          </span>
+          <span className="text-fai font-mono text-[11px] font-medium">Maintainer</span>
+        </div>
+      </a>
       <div className="flex flex-col gap-2.75 px-4 py-3.5">
         <MetaRow label="Version">
           <span className="font-mono text-[12px]">{pkg.version ?? '—'}</span>
