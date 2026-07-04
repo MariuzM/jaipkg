@@ -12,8 +12,8 @@ export const Route = createFileRoute('/')({
   loader: async () => {
     const [stats, popular, newest] = await Promise.all([
       getStats(),
-      getPackages({ data: { sort: 'stars', perPage: 6 } }),
-      getPackages({ data: { sort: 'created', perPage: 5 } }),
+      getPackages({ data: { sort: 'stars', perPage: 12 } }),
+      getPackages({ data: { sort: 'created', perPage: 20 } }),
     ])
     return { stats, popular: popular.items, newest: newest.items }
   },
