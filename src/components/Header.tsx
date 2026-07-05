@@ -33,6 +33,13 @@ export const Header = () => (
         >
           Browse
         </Link>
+        <Link
+          to="/about"
+          className="hover:text-tx transition-colors"
+          activeProps={{ className: 'text-tx' }}
+        >
+          About
+        </Link>
       </nav>
       <div className="bg-bd h-5 w-px" />
       <div className="flex items-center gap-2">

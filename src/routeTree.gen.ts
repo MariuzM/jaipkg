@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesIndexRouteImport } from './routes/packages/index'
 import { Route as ApiSyncRouteImport } from './routes/api/sync'
 import { Route as PackagesOwnerRepoRouteImport } from './routes/packages/$owner.$repo'
 
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const PackagesOwnerRepoRoute = PackagesOwnerRepoRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/sync': typeof ApiSyncRoute
   '/packages/': typeof PackagesIndexRoute
   '/packages/$owner/$repo': typeof PackagesOwnerRepoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/sync': typeof ApiSyncRoute
   '/packages': typeof PackagesIndexRoute
   '/packages/$owner/$repo': typeof PackagesOwnerRepoRoute
@@ -50,20 +58,29 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/sync': typeof ApiSyncRoute
   '/packages/': typeof PackagesIndexRoute
   '/packages/$owner/$repo': typeof PackagesOwnerRepoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/sync' | '/packages/' | '/packages/$owner/$repo'
+  fullPaths:
+    '/' | '/about' | '/api/sync' | '/packages/' | '/packages/$owner/$repo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/sync' | '/packages' | '/packages/$owner/$repo'
-  id: '__root__' | '/' | '/api/sync' | '/packages/' | '/packages/$owner/$repo'
+  to: '/' | '/about' | '/api/sync' | '/packages' | '/packages/$owner/$repo'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/api/sync'
+    | '/packages/'
+    | '/packages/$owner/$repo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ApiSyncRoute: typeof ApiSyncRoute
   PackagesIndexRoute: typeof PackagesIndexRoute
   PackagesOwnerRepoRoute: typeof PackagesOwnerRepoRoute
@@ -71,6 +88,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +128,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ApiSyncRoute: ApiSyncRoute,
   PackagesIndexRoute: PackagesIndexRoute,
   PackagesOwnerRepoRoute: PackagesOwnerRepoRoute,
