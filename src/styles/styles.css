@@ -240,3 +240,191 @@ svg {
   border-top: 1px solid var(--bd2);
   margin: 20px 0;
 }
+
+.readme .pl-c {
+  color: #8b949e;
+}
+.readme .pl-c1,
+.readme .pl-s .pl-v {
+  color: #79c0ff;
+}
+.readme .pl-e,
+.readme .pl-en {
+  color: #d2a8ff;
+}
+.readme .pl-smi,
+.readme .pl-s .pl-s1 {
+  color: #c9d1d9;
+}
+.readme .pl-ent {
+  color: #7ee787;
+}
+.readme .pl-k {
+  color: #ff7b72;
+}
+.readme .pl-s,
+.readme .pl-pds,
+.readme .pl-s .pl-pse .pl-s1,
+.readme .pl-sr,
+.readme .pl-sr .pl-cce,
+.readme .pl-sr .pl-sre,
+.readme .pl-sr .pl-sra {
+  color: #a5d6ff;
+}
+.readme .pl-v,
+.readme .pl-smw {
+  color: #ffa657;
+}
+.readme .pl-bu {
+  color: #f85149;
+}
+.readme .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519;
+}
+.readme .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324;
+}
+.readme .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #7ee787;
+}
+.readme .pl-ml {
+  color: #f2cc60;
+}
+.readme .pl-mh,
+.readme .pl-mh .pl-en,
+.readme .pl-ms {
+  font-weight: bold;
+  color: #1f6feb;
+}
+.readme .pl-mi {
+  font-style: italic;
+  color: #c9d1d9;
+}
+.readme .pl-mb {
+  font-weight: bold;
+  color: #c9d1d9;
+}
+.readme .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+.readme .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+.readme .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02;
+}
+.readme .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7;
+}
+.readme .pl-mdr {
+  font-weight: bold;
+  color: #d2a8ff;
+}
+.readme .pl-ba {
+  color: #8b949e;
+}
+.readme .pl-sg {
+  color: #484f58;
+}
+.readme .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff;
+}
+
+:root[data-theme="light"] .readme .pl-c {
+  color: #6e7781;
+}
+:root[data-theme="light"] .readme .pl-c1,
+:root[data-theme="light"] .readme .pl-s .pl-v {
+  color: #0550ae;
+}
+:root[data-theme="light"] .readme .pl-e,
+:root[data-theme="light"] .readme .pl-en {
+  color: #8250df;
+}
+:root[data-theme="light"] .readme .pl-smi,
+:root[data-theme="light"] .readme .pl-s .pl-s1 {
+  color: #24292f;
+}
+:root[data-theme="light"] .readme .pl-ent {
+  color: #116329;
+}
+:root[data-theme="light"] .readme .pl-k {
+  color: #cf222e;
+}
+:root[data-theme="light"] .readme .pl-s,
+:root[data-theme="light"] .readme .pl-pds,
+:root[data-theme="light"] .readme .pl-s .pl-pse .pl-s1,
+:root[data-theme="light"] .readme .pl-sr,
+:root[data-theme="light"] .readme .pl-sr .pl-cce,
+:root[data-theme="light"] .readme .pl-sr .pl-sre,
+:root[data-theme="light"] .readme .pl-sr .pl-sra {
+  color: #0a3069;
+}
+:root[data-theme="light"] .readme .pl-v,
+:root[data-theme="light"] .readme .pl-smw {
+  color: #953800;
+}
+:root[data-theme="light"] .readme .pl-bu {
+  color: #82071e;
+}
+:root[data-theme="light"] .readme .pl-ii {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+:root[data-theme="light"] .readme .pl-c2 {
+  color: #f6f8fa;
+  background-color: #cf222e;
+}
+:root[data-theme="light"] .readme .pl-sr .pl-cce {
+  color: #116329;
+}
+:root[data-theme="light"] .readme .pl-ml {
+  color: #3b2300;
+}
+:root[data-theme="light"] .readme .pl-mh,
+:root[data-theme="light"] .readme .pl-mh .pl-en,
+:root[data-theme="light"] .readme .pl-ms {
+  color: #0550ae;
+}
+:root[data-theme="light"] .readme .pl-mi {
+  color: #24292f;
+}
+:root[data-theme="light"] .readme .pl-mb {
+  color: #24292f;
+}
+:root[data-theme="light"] .readme .pl-md {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+:root[data-theme="light"] .readme .pl-mi1 {
+  color: #116329;
+  background-color: #dafbe1;
+}
+:root[data-theme="light"] .readme .pl-mc {
+  color: #953800;
+  background-color: #ffd8b5;
+}
+:root[data-theme="light"] .readme .pl-mi2 {
+  color: #eaeef2;
+  background-color: #0550ae;
+}
+:root[data-theme="light"] .readme .pl-mdr {
+  color: #8250df;
+}
+:root[data-theme="light"] .readme .pl-ba {
+  color: #57606a;
+}
+:root[data-theme="light"] .readme .pl-sg {
+  color: #8c959f;
+}
+:root[data-theme="light"] .readme .pl-corl {
+  color: #0a3069;
+}
