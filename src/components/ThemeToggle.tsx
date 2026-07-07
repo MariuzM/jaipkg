@@ -17,7 +17,7 @@ export const ThemeToggle = () => {
       onClick={toggle}
       title="Toggle theme"
       aria-label="Toggle theme"
-      className="border-chipbd bg-chip text-mut hover:border-acc hover:text-tx flex size-7.5 items-center justify-center rounded-lg border transition"
+      className="border-chipbd bg-chip text-mut hover:border-acc hover:text-tx flex size-7.5 items-center justify-center rounded-sm border transition"
     >
       <IconMoon className="ic-moon" />
       <IconSun className="ic-sun" />

@@ -3,13 +3,15 @@ import { sql } from 'drizzle-orm'
 import { getDb } from '@/db'
 import { packages } from '@/db/schema'
 import type { NewPackageRow } from '@/db/schema'
+import type { Brand } from '@/lib/brands'
 import type { Package } from '@/lib/types'
 
 import { fetchLatestVersion, GITHUB_SEARCH_LIMIT, searchReposPage } from './github-source'
 import type { GhError } from './github-source'
 
-const toRow = (p: Package): NewPackageRow => ({
+const toRow = (p: Package, ecosystem: string): NewPackageRow => ({
   id: p.id,
+  ecosystem,
   githubId: p.githubId,
   name: p.name,
   owner: p.owner,
@@ -58,16 +60,6 @@ const updateSet = {
   syncedAt: sql`now()`,
 }
 
-const DISCOVERY_QUERIES = [
-  'language:Jai fork:false',
-  'topic:jai fork:false',
-  'topic:jai-lang fork:false',
-  'topic:jai-programming-language fork:false',
-  'topic:jai-module fork:false',
-  'topic:jai-library fork:false',
-  'topic:jai-beta-users fork:false',
-]
-
 const GITHUB_PAGE_LIMIT = Math.ceil(GITHUB_SEARCH_LIMIT / 100)
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -102,7 +94,9 @@ const isGhError = (e: unknown): e is GhError =>
 const collectQuery = async (
   query: string,
   collected: Map<number, Package>,
-  opts: Required<Omit<SyncOptions, 'onProgress'>> & { onProgress?: (msg: string) => void },
+  opts: Required<Omit<SyncOptions, 'onProgress'>> & {
+    onProgress?: (msg: string) => void
+  },
 ) => {
   const maxPages = Math.min(opts.maxPagesPerQuery, GITHUB_PAGE_LIMIT)
 
@@ -148,18 +142,21 @@ const collectQuery = async (
   }
 }
 
-export const syncPackages = async ({
-  perPage = 100,
-  maxPagesPerQuery = GITHUB_PAGE_LIMIT,
-  delayMs = process.env.GITHUB_TOKEN ? 300 : 2500,
-  fetchVersions = Boolean(process.env.GITHUB_TOKEN),
-  onProgress,
-}: SyncOptions = {}): Promise<number> => {
+export const syncPackages = async (
+  brand: Brand,
+  {
+    perPage = 100,
+    maxPagesPerQuery = GITHUB_PAGE_LIMIT,
+    delayMs = process.env.GITHUB_TOKEN ? 300 : 2500,
+    fetchVersions = Boolean(process.env.GITHUB_TOKEN),
+    onProgress,
+  }: SyncOptions = {},
+): Promise<number> => {
   const db = getDb()
   if (!db) throw new Error('DATABASE_URL is not set')
 
   const collected = new Map<number, Package>()
-  for (const query of DISCOVERY_QUERIES) {
+  for (const query of brand.discoveryQueries) {
     await collectQuery(query, collected, {
       perPage,
       maxPagesPerQuery,
@@ -183,7 +180,7 @@ export const syncPackages = async ({
     })
   }
 
-  const rows = list.map(toRow)
+  const rows = list.map((p) => toRow(p, brand.id))
   if (rows.length === 0) return 0
 
   const chunkSize = 200
@@ -191,7 +188,10 @@ export const syncPackages = async ({
     await db
       .insert(packages)
       .values(rows.slice(i, i + chunkSize))
-      .onConflictDoUpdate({ target: packages.githubId, set: updateSet })
+      .onConflictDoUpdate({
+        target: [packages.ecosystem, packages.githubId],
+        set: updateSet,
+      })
   }
 
   return rows.length

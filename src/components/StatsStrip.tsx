@@ -67,7 +67,7 @@ export const StatsStrip = ({ stats }: Props) => {
       <div className="mx-auto grid max-w-[860px] grid-cols-3 gap-8 px-6 py-3.5">
         {cells.map((c) => (
           <div key={c.label} className="flex items-center justify-center gap-3.5 py-5.5">
-            <div className="border-accbd bg-accsoft text-acc2 flex size-10.5 flex-none items-center justify-center rounded-[11px] border">
+            <div className="border-accbd bg-accsoft text-acc2 flex size-10.5 flex-none items-center justify-center rounded-md border">
               {c.icon}
             </div>
             <div className="min-w-0">

@@ -19,7 +19,7 @@ export const PackageCard = ({ pkg }: Props) => {
     <Link
       to="/packages/$owner/$repo"
       params={{ owner: pkg.owner, repo: pkg.name }}
-      className="group border-bd bg-card hover:border-acc flex flex-col gap-2.75 rounded-[12px] border p-4 transition-all duration-150 hover:-translate-y-0.5"
+      className="group border-bd bg-card hover:border-acc flex flex-col gap-2.75 rounded-lg border p-4 transition-all duration-150 hover:-translate-y-0.5"
     >
       <div className="flex items-center justify-between">
         <button
@@ -29,7 +29,7 @@ export const PackageCard = ({ pkg }: Props) => {
             e.stopPropagation()
             navigate({ to: '/packages', search: { kind, sort: 'stars' } })
           }}
-          className="cursor-pointer rounded-[5px] px-1.75 py-0.75 font-mono text-[10px] font-semibold tracking-[0.05em] uppercase transition-opacity hover:opacity-80"
+          className="cursor-pointer rounded-xs px-1.75 py-0.75 font-mono text-[10px] font-semibold tracking-[0.05em] uppercase transition-opacity hover:opacity-80"
           style={{ color: ks.color, background: ks.bg }}
         >
           {kind}
@@ -44,7 +44,7 @@ export const PackageCard = ({ pkg }: Props) => {
         <div className="flex items-center gap-2">
           <span className="text-tx truncate font-mono text-[15.5px] font-bold">{pkg.name}</span>
           {(pkg.version ?? pkg.license) && (
-            <span className="border-chipbd bg-chip text-mut shrink-0 rounded-[5px] border px-1.5 py-0.5 font-mono text-[10.5px] font-medium">
+            <span className="border-chipbd bg-chip text-mut shrink-0 rounded-xs border px-1.5 py-0.5 font-mono text-[10.5px] font-medium">
               {pkg.version ?? pkg.license}
             </span>
           )}
@@ -56,7 +56,7 @@ export const PackageCard = ({ pkg }: Props) => {
 
       <div className="mt-auto flex items-center justify-between">
         <span className="text-fai flex items-center gap-1.75 font-sans text-[11.5px] font-medium">
-          <span className="bg-surf2 text-tx2 flex size-4.5 items-center justify-center rounded-[5px] font-mono text-[9px] font-bold">
+          <span className="bg-surf2 text-tx2 flex size-4.5 items-center justify-center rounded-xs font-mono text-[9px] font-bold">
             {ownerInitial(pkg.owner)}
           </span>
           {pkg.owner}

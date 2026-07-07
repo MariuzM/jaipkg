@@ -34,7 +34,7 @@ export const SearchBar = ({ initial = '', autofocus = false }: Props) => {
   return (
     <form
       onSubmit={submit}
-      className="shadow-card border-chipbd bg-surf focus-within:border-acc flex items-center gap-2.75 rounded-[13px] border py-1.5 pr-1.5 pl-4 transition-colors"
+      className="shadow-card border-chipbd bg-surf focus-within:border-acc flex items-center gap-2.75 rounded-lg border py-1.5 pr-1.5 pl-4 transition-colors"
     >
       <IconSearch size={17} className="text-fai" />
       <input
@@ -47,7 +47,7 @@ export const SearchBar = ({ initial = '', autofocus = false }: Props) => {
       />
       <button
         type="submit"
-        className="bg-acc text-btx rounded-[9px] px-4.5 py-2.25 font-sans text-[13.5px] font-semibold transition-opacity hover:opacity-90"
+        className="bg-acc text-btx rounded-md px-4.5 py-2.25 font-sans text-[13.5px] font-semibold transition-opacity hover:opacity-90"
       >
         Search
       </button>

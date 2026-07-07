@@ -1,10 +1,10 @@
 import { ulid } from 'ulid'
 
+import type { Brand } from '@/lib/brands'
 import { deriveKind } from '@/lib/pkg'
 import type { Package, PackageQuery, Release } from '@/lib/types'
 
 const GITHUB_API = 'https://api.github.com'
-export const JAI_QUALIFIER = 'language:Jai fork:false'
 
 type CacheEntry = { at: number; value: unknown }
 const cache = new Map<string, CacheEntry>()
@@ -22,7 +22,7 @@ const baseHeaders = (): Record<string, string> => {
   const token = process.env.GITHUB_TOKEN
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'jaipkg',
+    'User-Agent': 'pkg-registry',
     'X-GitHub-Api-Version': '2022-11-28',
   }
   if (token) headers.Authorization = `Bearer ${token}`
@@ -140,7 +140,12 @@ const sortParam = (sort: PackageQuery['sort']) => {
 
 export const searchReposPage = async (
   rawQuery: string,
-  opts: { sort?: PackageQuery['sort']; page?: number; perPage?: number; ttlMs?: number } = {},
+  opts: {
+    sort?: PackageQuery['sort']
+    page?: number
+    perPage?: number
+    ttlMs?: number
+  } = {},
 ): Promise<{ items: Array<Package>; total: number }> => {
   const page = Math.max(1, opts.page ?? 1)
   const perPage = Math.min(100, opts.perPage ?? 24)
@@ -167,11 +172,12 @@ export const searchReposPage = async (
   }
 }
 
-export const searchJaiRepos = async (
+export const searchRepos = async (
+  brand: Brand,
   query: PackageQuery,
 ): Promise<{ items: Array<Package>; total: number }> => {
   const term = (query.q ?? '').trim()
-  const q = term ? `${JAI_QUALIFIER} ${term}` : JAI_QUALIFIER
+  const q = term ? `${brand.searchQualifier} ${term}` : brand.searchQualifier
   return searchReposPage(q, {
     sort: query.sort,
     page: query.page,

@@ -1,4 +1,13 @@
-import { boolean, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core'
 import { ulid } from 'ulid'
 
 import type { Release } from '@/lib/types'
@@ -9,7 +18,8 @@ export const packages = pgTable(
     id: text('id')
       .primaryKey()
       .$defaultFn(() => ulid()),
-    githubId: integer('github_id').notNull().unique(),
+    ecosystem: text('ecosystem').notNull().default('jai'),
+    githubId: integer('github_id').notNull(),
     name: text('name').notNull(),
     owner: text('owner').notNull(),
     fullName: text('full_name').notNull(),
@@ -26,8 +36,12 @@ export const packages = pgTable(
     language: text('language'),
     kind: text('kind').notNull().default('library'),
     pushedAt: timestamp('pushed_at', { withTimezone: true }).notNull(),
-    repoCreatedAt: timestamp('repo_created_at', { withTimezone: true }).notNull(),
-    repoUpdatedAt: timestamp('repo_updated_at', { withTimezone: true }).notNull(),
+    repoCreatedAt: timestamp('repo_created_at', {
+      withTimezone: true,
+    }).notNull(),
+    repoUpdatedAt: timestamp('repo_updated_at', {
+      withTimezone: true,
+    }).notNull(),
     ownerAvatar: text('owner_avatar').notNull(),
     archived: boolean('archived').notNull().default(false),
     defaultBranch: text('default_branch').notNull().default('main'),
@@ -36,6 +50,8 @@ export const packages = pgTable(
     syncedAt: timestamp('synced_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
+    uniqueIndex('packages_ecosystem_github_id_key').on(t.ecosystem, t.githubId),
+    index('packages_ecosystem_idx').on(t.ecosystem),
     index('packages_stars_idx').on(t.stars),
     index('packages_pushed_idx').on(t.pushedAt),
     index('packages_owner_idx').on(t.owner),

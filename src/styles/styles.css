@@ -22,6 +22,11 @@
   --card: #131316;
   --btx: #0c0b08;
   --shadow: 0 10px 34px -14px rgba(0, 0, 0, 0.75);
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 13px;
+  --r-pill: 20px;
 }
 
 :root[data-theme="light"] {
@@ -44,6 +49,38 @@
   --shadow: 0 12px 30px -16px rgba(20, 20, 25, 0.28);
 }
 
+:root[data-brand="odin"] {
+  --acc: hsl(28, 86%, 42%);
+  --btx: #fdf7f0;
+  --r-xs: 0.25rem;
+  --r-sm: 0.25rem;
+  --r-md: 0.25rem;
+  --r-lg: 0.25rem;
+  --r-pill: 0.25rem;
+}
+
+:root[data-theme="dark"][data-brand="odin"] {
+  --bg: #0a0f1a;
+  --surf: #0f1627;
+  --surf2: #17223a;
+  --card: #0f1627;
+  --bd: rgba(124, 164, 224, 0.11);
+  --bd2: rgba(124, 164, 224, 0.06);
+  --chip: rgba(124, 164, 224, 0.06);
+  --chipbd: rgba(124, 164, 224, 0.12);
+}
+
+:root[data-theme="light"][data-brand="odin"] {
+  --bg: #eef2f8;
+  --surf: #ffffff;
+  --surf2: #e6ecf5;
+  --card: #ffffff;
+  --bd: rgba(30, 50, 90, 0.12);
+  --bd2: rgba(30, 50, 90, 0.07);
+  --chip: #ffffff;
+  --chipbd: rgba(30, 50, 90, 0.12);
+}
+
 @theme {
   --color-bg: var(--bg);
   --color-surf: var(--surf);
@@ -64,6 +101,12 @@
   --color-ok: var(--ok);
   --color-card: var(--card);
   --color-btx: var(--btx);
+
+  --radius-xs: var(--r-xs);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-pill: var(--r-pill);
 
   --font-sans: "Figtree", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -140,12 +183,14 @@ svg {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--chipbd);
-  border-radius: 6px;
+  border-radius: var(--r-xs);
   border: 3px solid var(--bg);
 }
 
 .readme {
-  font: 400 14.5px/1.65 "Figtree", sans-serif;
+  font:
+    400 14.5px/1.65 "Figtree",
+    sans-serif;
   color: var(--tx2);
   overflow-wrap: break-word;
 }
@@ -191,16 +236,18 @@ svg {
   margin: 3px 0;
 }
 .readme code {
-  font: 500 12.5px "JetBrains Mono", monospace;
+  font:
+    500 12.5px "JetBrains Mono",
+    monospace;
   background: var(--chip);
   border: 1px solid var(--chipbd);
   padding: 1px 5px;
-  border-radius: 5px;
+  border-radius: var(--r-xs);
 }
 .readme pre {
   background: var(--surf);
   border: 1px solid var(--bd);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   padding: 16px;
   overflow-x: auto;
   margin: 0 0 16px;
@@ -215,7 +262,7 @@ svg {
 .readme img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
 }
 .readme blockquote {
   margin: 0 0 14px;

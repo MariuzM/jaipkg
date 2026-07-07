@@ -4,6 +4,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { getDb } from '@/db'
 import type { PackageRow } from '@/db/schema'
 import { packages } from '@/db/schema'
+import { getBrandId } from '@/lib/brand-resolver'
+import type { Brand } from '@/lib/brands'
+import { getBrand } from '@/lib/brands'
 import type {
   Package,
   PackageDetail,
@@ -17,7 +20,7 @@ import {
   fetchLatestVersion,
   fetchReadmeAndReleases,
   fetchRepoCore,
-  searchJaiRepos,
+  searchRepos,
 } from './github-source'
 
 const columns = {
@@ -89,8 +92,12 @@ const orderFor = (sort: SortKey | undefined) => {
   }
 }
 
-const hasRows = async (db: NonNullable<ReturnType<typeof getDb>>) => {
-  const [row] = await db.select({ value: count() }).from(packages).limit(1)
+const hasRows = async (db: NonNullable<ReturnType<typeof getDb>>, brand: Brand) => {
+  const [row] = await db
+    .select({ value: count() })
+    .from(packages)
+    .where(eq(packages.ecosystem, brand.id))
+    .limit(1)
   return row.value > 0
 }
 
@@ -100,10 +107,12 @@ export const getPackages = createServerFn({ method: 'GET' })
     const page = Math.max(1, data.page ?? 1)
     const perPage = Math.min(50, data.perPage ?? 24)
     const term = (data.q ?? '').trim()
+    const brand = getBrand(getBrandId())
     const db = getDb()
 
-    if (db && (await hasRows(db))) {
+    if (db && (await hasRows(db, brand))) {
       const filters = [
+        eq(packages.ecosystem, brand.id),
         term
           ? or(
               ilike(packages.name, `%${term}%`),
@@ -134,13 +143,14 @@ export const getPackages = createServerFn({ method: 'GET' })
       }
     }
 
-    const res = await searchJaiRepos({ ...data, page, perPage })
+    const res = await searchRepos(brand, { ...data, page, perPage })
     return { items: res.items, total: res.total, page, perPage }
   })
 
 export const getStats = createServerFn({ method: 'GET' }).handler(async (): Promise<Stats> => {
+  const brand = getBrand(getBrandId())
   const db = getDb()
-  if (db && (await hasRows(db))) {
+  if (db && (await hasRows(db, brand))) {
     const [row] = await db
       .select({
         total: count(),
@@ -148,6 +158,7 @@ export const getStats = createServerFn({ method: 'GET' }).handler(async (): Prom
         authors: sql<number>`count(distinct ${packages.owner})`,
       })
       .from(packages)
+      .where(eq(packages.ecosystem, brand.id))
     return {
       totalPackages: Number(row.total),
       totalStars: Number(row.stars),
@@ -155,7 +166,7 @@ export const getStats = createServerFn({ method: 'GET' }).handler(async (): Prom
     }
   }
 
-  const res = await searchJaiRepos({ sort: 'stars', perPage: 100 })
+  const res = await searchRepos(brand, { sort: 'stars', perPage: 100 })
   return {
     totalPackages: res.total,
     totalStars: res.items.reduce((sum, p) => sum + p.stars, 0),
@@ -167,6 +178,7 @@ export const getPackage = createServerFn({ method: 'GET' })
   .validator((d: { owner: string; repo: string }) => d)
   .handler(async ({ data }): Promise<PackageDetail> => {
     const { owner, repo } = data
+    const brand = getBrand(getBrandId())
     const db = getDb()
 
     let base: Package
@@ -174,7 +186,13 @@ export const getPackage = createServerFn({ method: 'GET' })
       const rows = await db
         .select(columns)
         .from(packages)
-        .where(and(ilike(packages.owner, owner), ilike(packages.name, repo)))
+        .where(
+          and(
+            eq(packages.ecosystem, brand.id),
+            ilike(packages.owner, owner),
+            ilike(packages.name, repo),
+          ),
+        )
         .limit(1)
       base = rows.length ? rowToPackage(rows[0]) : await fetchRepoCore(owner, repo)
     } else {

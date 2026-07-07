@@ -99,14 +99,14 @@ function PackagesPage() {
                   key={c.label}
                   to="/packages"
                   search={{ kind: c.kind, sort }}
-                  className={`flex items-center gap-2.25 rounded-[8px] px-2.5 py-2 font-sans text-[13px] transition-colors ${
+                  className={`flex items-center gap-2.25 rounded-sm px-2.5 py-2 font-sans text-[13px] transition-colors ${
                     active
                       ? 'bg-accsoft text-tx font-semibold'
                       : 'text-tx2 hover:bg-chip font-medium'
                   }`}
                 >
                   <span
-                    className="flex size-3.75 items-center justify-center rounded-[4px] border"
+                    className="flex size-3.75 items-center justify-center rounded-xs border"
                     style={
                       active
                         ? {
@@ -135,7 +135,7 @@ function PackagesPage() {
                   key={o.value}
                   to="/packages"
                   search={{ q: search.q, kind: search.kind, sort: o.value }}
-                  className={`rounded-[8px] px-2.5 py-1.75 font-sans text-[13px] transition-colors ${
+                  className={`rounded-sm px-2.5 py-1.75 font-sans text-[13px] transition-colors ${
                     active
                       ? 'bg-accsoft text-acc2 font-semibold'
                       : 'text-tx2 hover:bg-chip font-medium'
@@ -158,7 +158,7 @@ function PackagesPage() {
                     key={t}
                     to="/packages"
                     search={{ q: t, sort }}
-                    className="rounded-[20px] border px-2.25 py-1 font-mono text-[11.5px] font-medium transition-colors"
+                    className="rounded-pill border px-2.25 py-1 font-mono text-[11.5px] font-medium transition-colors"
                     style={
                       active
                         ? {
@@ -216,7 +216,7 @@ function PackagesPage() {
           </div>
 
           {data.items.length === 0 ? (
-            <div className="border-bd bg-card flex flex-col items-center gap-3 rounded-[12px] border py-16 text-center">
+            <div className="border-bd bg-card flex flex-col items-center gap-3 rounded-lg border py-16 text-center">
               <p className="text-mut font-sans">No packages match your search.</p>
               <Link
                 to="/packages"
@@ -296,7 +296,7 @@ const ViewButton = ({ active, onClick, label, children }: ViewButtonProps) => (
   <button
     onClick={onClick}
     aria-label={label}
-    className={`flex h-7 w-7.5 items-center justify-center rounded-[7px] border transition-colors ${
+    className={`flex h-7 w-7.5 items-center justify-center rounded-sm border transition-colors ${
       active ? 'border-acc bg-accsoft text-acc2' : 'border-chipbd text-fai hover:text-tx'
     }`}
   >
@@ -318,7 +318,7 @@ const PageLink = ({ to, disabled, q, kind, sort, children }: PageLinkProps) => (
     to="/packages"
     search={{ q, kind, sort, page: to > 1 ? to : undefined }}
     aria-disabled={disabled}
-    className="border-chipbd bg-chip text-mut hover:text-tx flex size-8 items-center justify-center rounded-[8px] border transition-colors aria-disabled:pointer-events-none aria-disabled:opacity-40"
+    className="border-chipbd bg-chip text-mut hover:text-tx flex size-8 items-center justify-center rounded-sm border transition-colors aria-disabled:pointer-events-none aria-disabled:opacity-40"
   >
     {children}
   </Link>
