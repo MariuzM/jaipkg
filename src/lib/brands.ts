@@ -49,7 +49,6 @@ export const BRANDS: Record<BrandId, Brand> = {
     searchQualifier: 'language:Odin fork:false',
     discoveryQueries: [
       'language:Odin fork:false',
-      'topic:odin fork:false',
       'topic:odin-lang fork:false',
       'topic:odinlang fork:false',
       'topic:odin-programming-language fork:false',
