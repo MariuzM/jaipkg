@@ -16,12 +16,7 @@ export const LegacyNotice = ({ brand }: Props) => {
   return (
     <div className="flex min-h-screen items-center justify-center px-6.5 py-10">
       <div className="relative w-full max-w-[520px] text-center">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: 'radial-gradient(600px 300px at 50% -20%,var(--heroglow),transparent 70%)',
-          }}
-        />
+        <div className="pointer-events-none absolute inset-0" />
         <div className="relative">
           <span className="border-accbd bg-accsoft text-acc2 rounded-pill inline-flex items-center gap-2 border px-2.75 py-1.25 font-mono text-[11px] font-semibold tracking-[0.06em] uppercase">
             We&apos;re moving

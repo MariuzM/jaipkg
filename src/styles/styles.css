@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --acc: #ab8b4b;
-  --bg: #0a0a0b;
-  --surf: #131316;
-  --surf2: #1b1b1f;
-  --bd: rgba(255, 255, 255, 0.08);
-  --bd2: rgba(255, 255, 255, 0.055);
+  --acc: #7c74ff;
+  --bg: #09090f;
+  --surf: #14141f;
+  --surf2: #1d1d2b;
+  --bd: rgba(150, 140, 255, 0.12);
+  --bd2: rgba(150, 140, 255, 0.06);
   --tx: #fafafa;
   --tx2: #e4e4e7;
   --mut: #a1a1aa;
@@ -15,12 +15,12 @@
   --acc2: color-mix(in srgb, var(--acc) 68%, #fff);
   --accsoft: color-mix(in srgb, var(--acc) 15%, transparent);
   --accbd: color-mix(in srgb, var(--acc) 34%, transparent);
-  --heroglow: color-mix(in srgb, var(--acc) 20%, transparent);
-  --chip: rgba(255, 255, 255, 0.05);
-  --chipbd: rgba(255, 255, 255, 0.09);
+  --heroglow: color-mix(in srgb, var(--acc) 22%, transparent);
+  --chip: rgba(150, 140, 255, 0.06);
+  --chipbd: rgba(150, 140, 255, 0.13);
   --ok: #34d399;
-  --card: #131316;
-  --btx: #0c0b08;
+  --card: #14141f;
+  --btx: #0b0a1a;
   --shadow: 0 10px 34px -14px rgba(0, 0, 0, 0.75);
   --r-xs: 6px;
   --r-sm: 8px;
@@ -30,11 +30,11 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #f7f6f3;
+  --bg: #f4f3fb;
   --surf: #ffffff;
-  --surf2: #f1efea;
-  --bd: rgba(20, 20, 25, 0.1);
-  --bd2: rgba(20, 20, 25, 0.06);
+  --surf2: #edecf8;
+  --bd: rgba(60, 50, 120, 0.12);
+  --bd2: rgba(60, 50, 120, 0.06);
   --tx: #16171c;
   --tx2: #2a2b31;
   --mut: #5b5d66;
@@ -42,11 +42,39 @@
   --dim: #a8aab2;
   --acc2: color-mix(in srgb, var(--acc) 72%, #000);
   --chip: #ffffff;
-  --chipbd: rgba(20, 20, 25, 0.11);
+  --chipbd: rgba(60, 50, 120, 0.13);
   --ok: #1a915f;
   --card: #ffffff;
-  --btx: #fbf7ee;
+  --btx: #0b0a1a;
   --shadow: 0 12px 30px -16px rgba(20, 20, 25, 0.28);
+}
+
+:root[data-brand="jai"] {
+  --acc: #ab8b4b;
+  --btx: #0c0b08;
+}
+
+:root[data-theme="dark"][data-brand="jai"] {
+  --bg: #0a0a0b;
+  --surf: #131316;
+  --surf2: #1b1b1f;
+  --card: #131316;
+  --bd: rgba(255, 255, 255, 0.08);
+  --bd2: rgba(255, 255, 255, 0.055);
+  --chip: rgba(255, 255, 255, 0.05);
+  --chipbd: rgba(255, 255, 255, 0.09);
+}
+
+:root[data-theme="light"][data-brand="jai"] {
+  --bg: #f7f6f3;
+  --surf: #ffffff;
+  --surf2: #f1efea;
+  --card: #ffffff;
+  --bd: rgba(20, 20, 25, 0.1);
+  --bd2: rgba(20, 20, 25, 0.06);
+  --chip: #ffffff;
+  --chipbd: rgba(20, 20, 25, 0.11);
+  --btx: #fbf7ee;
 }
 
 :root[data-brand="odin"] {
@@ -79,34 +107,6 @@
   --bd2: rgba(30, 50, 90, 0.07);
   --chip: #ffffff;
   --chipbd: rgba(30, 50, 90, 0.12);
-}
-
-:root[data-brand="langpkg"] {
-  --acc: #7c74ff;
-  --btx: #0b0a1a;
-  --heroglow: color-mix(in srgb, var(--acc) 24%, transparent);
-}
-
-:root[data-theme="dark"][data-brand="langpkg"] {
-  --bg: #09090f;
-  --surf: #14141f;
-  --surf2: #1d1d2b;
-  --card: #14141f;
-  --bd: rgba(150, 140, 255, 0.12);
-  --bd2: rgba(150, 140, 255, 0.06);
-  --chip: rgba(150, 140, 255, 0.06);
-  --chipbd: rgba(150, 140, 255, 0.13);
-}
-
-:root[data-theme="light"][data-brand="langpkg"] {
-  --bg: #f4f3fb;
-  --surf: #ffffff;
-  --surf2: #edecf8;
-  --card: #ffffff;
-  --bd: rgba(60, 50, 120, 0.12);
-  --bd2: rgba(60, 50, 120, 0.06);
-  --chip: #ffffff;
-  --chipbd: rgba(60, 50, 120, 0.13);
 }
 
 @theme {
