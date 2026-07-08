@@ -2,9 +2,10 @@ export type BrandId = 'jai' | 'odin'
 
 export type Brand = {
   id: BrandId
-  name: string
+  wordmark: string
   letter: string
-  domain: string
+  host: string
+  legacyHost: string
   tagline: string
   heroLine: string
   language: string
@@ -14,12 +15,18 @@ export type Brand = {
   discoveryQueries: Array<string>
 }
 
+export type HostResolution =
+  { kind: 'brand'; brandId: BrandId } | { kind: 'legacy'; brandId: BrandId } | { kind: 'landing' }
+
+export const LANDING_HOST = 'langpkg.dev'
+
 export const BRANDS: Record<BrandId, Brand> = {
   jai: {
     id: 'jai',
-    name: 'jaipkg',
+    wordmark: 'jai',
     letter: 'j',
-    domain: 'jaipkg.dev',
+    host: 'jai.langpkg.dev',
+    legacyHost: 'jaipkg.dev',
     tagline: 'Jai package discovery',
     heroLine: 'Jai dependency',
     language: 'Jai',
@@ -38,9 +45,10 @@ export const BRANDS: Record<BrandId, Brand> = {
   },
   odin: {
     id: 'odin',
-    name: 'odinpkg',
+    wordmark: 'odin',
     letter: 'o',
-    domain: 'odinpkg.dev',
+    host: 'odin.langpkg.dev',
+    legacyHost: 'odinpkg.dev',
     tagline: 'Odin package discovery',
     heroLine: 'Odin dependency',
     language: 'Odin',
@@ -64,13 +72,28 @@ export const isBrandId = (v: string | null | undefined): v is BrandId =>
 
 export const getBrand = (id: BrandId): Brand => BRANDS[id]
 
-export const brandIdFromHost = (host: string | null | undefined): BrandId => {
-  if (!host) return DEFAULT_BRAND_ID
-  const h = host.toLowerCase().split(':')[0]
-  const match = Object.values(BRANDS).find(
-    (b) => h === b.domain || h.endsWith(`.${b.domain}`) || h.split('.').includes(b.id),
+const normalizeHost = (host: string): string =>
+  host
+    .toLowerCase()
+    .split(':')[0]
+    .replace(/^www\./, '')
+
+export const resolveHost = (host: string | null | undefined): HostResolution => {
+  if (!host) return { kind: 'landing' }
+  const h = normalizeHost(host)
+  const labels = h.split('.')
+
+  const legacy = Object.values(BRANDS).find(
+    (b) => h === b.legacyHost || h.endsWith(`.${b.legacyHost}`),
   )
-  return match?.id ?? DEFAULT_BRAND_ID
+  if (legacy) return { kind: 'legacy', brandId: legacy.id }
+
+  const branded = Object.values(BRANDS).find(
+    (b) => h === b.host || h.endsWith(`.${b.host}`) || labels.includes(b.id),
+  )
+  if (branded) return { kind: 'brand', brandId: branded.id }
+
+  return { kind: 'landing' }
 }
 
 export const envBrandId = (): BrandId | null => {

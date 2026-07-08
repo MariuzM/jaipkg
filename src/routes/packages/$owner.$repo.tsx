@@ -15,19 +15,20 @@ import { useBrand } from '@/lib/useBrand'
 import { getPackage } from '@/server/packages'
 
 export const Route = createFileRoute('/packages/$owner/$repo')({
-  loader: ({ params }) => getPackage({ data: params }),
+  loader: ({ params, context }) =>
+    context.resolution.kind === 'brand' ? getPackage({ data: params }) : null,
   head: ({ loaderData, match }) => ({
     meta: [
       {
         title: loaderData
-          ? `${loaderData.name} — ${match.context.brand.name}`
-          : match.context.brand.name,
+          ? `${loaderData.name} — ${match.context.brand.host}`
+          : match.context.brand.host,
       },
       {
         name: 'description',
         content:
           loaderData?.description ??
-          `A ${match.context.brand.language} package on ${match.context.brand.name}.`,
+          `A ${match.context.brand.language} package on ${match.context.brand.host}.`,
       },
     ],
   }),
@@ -60,6 +61,8 @@ function PackagePage() {
   const pkg = Route.useLoaderData()
   const brand = useBrand()
   const [tab, setTab] = useState<Tab>('readme')
+
+  if (!pkg) return null
 
   const kind = pkg.kind
   const ks = kindStyle[kind]

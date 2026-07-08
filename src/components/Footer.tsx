@@ -8,7 +8,7 @@ export const Footer = () => {
     <footer className="border-bd2 mt-5 border-t">
       <div className="mx-auto flex max-w-[1240px] items-center justify-between px-6.5 py-5.5">
         <span className="text-dim font-sans text-[12px]">
-          © 2026 {brand.name} · A focused registry for the {brand.language} community
+          © 2026 {brand.host} · A focused registry for the {brand.language} community
         </span>
         <a
           href={`https://github.com/${brand.repo}`}

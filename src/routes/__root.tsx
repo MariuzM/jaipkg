@@ -1,26 +1,34 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import { createRootRoute, HeadContent, Scripts, useRouteContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { LanguageSelect } from '@/components/LanguageSelect'
+import { LegacyNotice } from '@/components/LegacyNotice'
 import { NotFound } from '@/components/NotFound'
-import { getBrandId } from '@/lib/brand-resolver'
-import { getBrand } from '@/lib/brands'
-import { useBrand } from '@/lib/useBrand'
+import { getHostResolution } from '@/lib/brand-resolver'
+import { DEFAULT_BRAND_ID, getBrand } from '@/lib/brands'
 
 import appCss from '../styles/styles.css?url'
 
 const themeInit = `try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}`
 
 export const Route = createRootRoute({
-  beforeLoad: () => ({ brand: getBrand(getBrandId()) }),
+  beforeLoad: () => {
+    const resolution = getHostResolution()
+    const brandId = resolution.kind === 'landing' ? DEFAULT_BRAND_ID : resolution.brandId
+    return { resolution, brand: getBrand(brandId) }
+  },
   head: ({ match }) => ({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        title: `${match.context.brand.name} — ${match.context.brand.language} package registry`,
+        title:
+          match.context.resolution.kind === 'landing'
+            ? 'langpkg.dev — package registries for Jai & Odin'
+            : `${match.context.brand.host} — ${match.context.brand.language} package registry`,
       },
       {
         name: 'description',
@@ -47,18 +55,31 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const brand = useBrand()
+  const { brand, resolution } = useRouteContext({ from: '__root__' })
+  const content =
+    resolution.kind === 'landing' ? (
+      <LanguageSelect />
+    ) : resolution.kind === 'legacy' ? (
+      <LegacyNotice brand={brand} />
+    ) : (
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
+    )
+
   return (
-    <html lang="en" data-theme="dark" data-brand={brand.id}>
+    <html
+      lang="en"
+      data-theme="dark"
+      data-brand={resolution.kind === 'landing' ? 'langpkg' : brand.id}
+    >
       <head>
         <HeadContent />
       </head>
       <body>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
+        {content}
         <TanStackDevtools
           config={{ position: 'bottom-right' }}
           plugins={[

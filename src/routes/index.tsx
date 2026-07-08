@@ -14,7 +14,15 @@ export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>): HomeSearch => ({
     view: search.view === 'updated' ? 'updated' : undefined,
   }),
-  loader: async () => {
+  loader: async ({ context }) => {
+    if (context.resolution.kind !== 'brand') {
+      return {
+        stats: { totalPackages: 0, totalStars: 0, topContributors: 0 },
+        popular: [],
+        updated: [],
+        newest: [],
+      }
+    }
     const [stats, popular, updated, newest] = await Promise.all([
       getStats(),
       getPackages({ data: { sort: 'stars', perPage: 12 } }),

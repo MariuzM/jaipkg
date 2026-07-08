@@ -61,8 +61,11 @@ export const Route = createFileRoute('/packages/')({
     }
   },
   loaderDeps: ({ search }) => search,
-  loader: async ({ deps }) =>
-    getPackages({
+  loader: async ({ deps, context }) => {
+    if (context.resolution.kind !== 'brand') {
+      return { items: [], total: 0, page: 1, perPage: PER_PAGE }
+    }
+    return getPackages({
       data: {
         q: deps.q,
         kind: deps.kind,
@@ -70,7 +73,8 @@ export const Route = createFileRoute('/packages/')({
         page: deps.page ?? 1,
         perPage: PER_PAGE,
       },
-    }),
+    })
+  },
   component: PackagesPage,
 })
 

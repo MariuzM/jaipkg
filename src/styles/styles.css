@@ -81,6 +81,34 @@
   --chipbd: rgba(30, 50, 90, 0.12);
 }
 
+:root[data-brand="langpkg"] {
+  --acc: #7c74ff;
+  --btx: #0b0a1a;
+  --heroglow: color-mix(in srgb, var(--acc) 24%, transparent);
+}
+
+:root[data-theme="dark"][data-brand="langpkg"] {
+  --bg: #09090f;
+  --surf: #14141f;
+  --surf2: #1d1d2b;
+  --card: #14141f;
+  --bd: rgba(150, 140, 255, 0.12);
+  --bd2: rgba(150, 140, 255, 0.06);
+  --chip: rgba(150, 140, 255, 0.06);
+  --chipbd: rgba(150, 140, 255, 0.13);
+}
+
+:root[data-theme="light"][data-brand="langpkg"] {
+  --bg: #f4f3fb;
+  --surf: #ffffff;
+  --surf2: #edecf8;
+  --card: #ffffff;
+  --bd: rgba(60, 50, 120, 0.12);
+  --bd2: rgba(60, 50, 120, 0.06);
+  --chip: #ffffff;
+  --chipbd: rgba(60, 50, 120, 0.13);
+}
+
 @theme {
   --color-bg: var(--bg);
   --color-surf: var(--surf);

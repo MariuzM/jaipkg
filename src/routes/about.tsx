@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import type { ReactNode } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { IconExternalLink } from "@/components/Icons";
+import { IconExternalLink } from '@/components/Icons'
 import {
   IconBun,
   IconDrizzle,
@@ -13,150 +13,149 @@ import {
   IconTypeScript,
   IconVercel,
   IconVite,
-} from "@/components/StackIcons";
-import { BRANDS } from "@/lib/brands";
-import { useBrand } from "@/lib/useBrand";
+} from '@/components/StackIcons'
+import { BRANDS } from '@/lib/brands'
+import { useBrand } from '@/lib/useBrand'
 
 type Tech = {
-  name: string;
-  role: string;
-  url: string;
-  color: string;
-  Icon?: (p: { size?: number; className?: string }) => ReactNode;
-  img?: string;
-};
+  name: string
+  role: string
+  url: string
+  color: string
+  Icon?: (p: { size?: number; className?: string }) => ReactNode
+  img?: string
+}
 
 type TechGroup = {
-  title: string;
-  items: Array<Tech>;
-};
+  title: string
+  items: Array<Tech>
+}
 
 const GROUPS: Array<TechGroup> = [
   {
-    title: "Framework & UI",
+    title: 'Framework & UI',
     items: [
       {
-        name: "React",
-        role: "UI library",
-        url: "https://react.dev",
-        color: "#61DAFB",
+        name: 'React',
+        role: 'UI library',
+        url: 'https://react.dev',
+        color: '#61DAFB',
         Icon: IconReact,
       },
       {
-        name: "TanStack Start",
-        role: "Full-stack framework",
-        url: "https://tanstack.com/start",
-        color: "#ffffff",
-        img: "/logos/tanstack.png",
+        name: 'TanStack Start',
+        role: 'Full-stack framework',
+        url: 'https://tanstack.com/start',
+        color: '#ffffff',
+        img: '/logos/tanstack.png',
       },
       {
-        name: "Vite",
-        role: "Build tool",
-        url: "https://vite.dev",
-        color: "#646CFF",
+        name: 'Vite',
+        role: 'Build tool',
+        url: 'https://vite.dev',
+        color: '#646CFF',
         Icon: IconVite,
       },
       {
-        name: "Tailwind CSS",
-        role: "Styling",
-        url: "https://tailwindcss.com",
-        color: "#06B6D4",
+        name: 'Tailwind CSS',
+        role: 'Styling',
+        url: 'https://tailwindcss.com',
+        color: '#06B6D4',
         Icon: IconTailwind,
       },
     ],
   },
   {
-    title: "Language & Quality",
+    title: 'Language & Quality',
     items: [
       {
-        name: "TypeScript",
-        role: "Language",
-        url: "https://www.typescriptlang.org",
-        color: "#3178C6",
+        name: 'TypeScript',
+        role: 'Language',
+        url: 'https://www.typescriptlang.org',
+        color: '#3178C6',
         Icon: IconTypeScript,
       },
       {
-        name: "ESLint",
-        role: "Linting",
-        url: "https://eslint.org",
-        color: "#4B32C3",
+        name: 'ESLint',
+        role: 'Linting',
+        url: 'https://eslint.org',
+        color: '#4B32C3',
         Icon: IconEslint,
       },
       {
-        name: "Prettier",
-        role: "Formatting",
-        url: "https://prettier.io",
-        color: "#F7B93E",
+        name: 'Prettier',
+        role: 'Formatting',
+        url: 'https://prettier.io',
+        color: '#F7B93E',
         Icon: IconPrettier,
       },
     ],
   },
   {
-    title: "Data & Runtime",
+    title: 'Data & Runtime',
     items: [
       {
-        name: "Drizzle ORM",
-        role: "Type-safe SQL",
-        url: "https://orm.drizzle.team",
-        color: "#C5F74F",
+        name: 'Drizzle ORM',
+        role: 'Type-safe SQL',
+        url: 'https://orm.drizzle.team',
+        color: '#C5F74F',
         Icon: IconDrizzle,
       },
       {
-        name: "PostgreSQL",
-        role: "Database",
-        url: "https://www.postgresql.org",
-        color: "#4169E1",
+        name: 'PostgreSQL',
+        role: 'Database',
+        url: 'https://www.postgresql.org',
+        color: '#4169E1',
         Icon: IconPostgres,
       },
       {
-        name: "Bun",
-        role: "Runtime & package manager",
-        url: "https://bun.sh",
-        color: "#F472B6",
+        name: 'Bun',
+        role: 'Runtime & package manager',
+        url: 'https://bun.sh',
+        color: '#F472B6',
         Icon: IconBun,
       },
       {
-        name: "Nitro",
-        role: "Server engine",
-        url: "https://nitro.build",
-        color: "#31B2F3",
-        img: "/logos/nitro.svg",
+        name: 'Nitro',
+        role: 'Server engine',
+        url: 'https://nitro.build',
+        color: '#31B2F3',
+        img: '/logos/nitro.svg',
       },
       {
-        name: "Vercel",
-        role: "Hosting",
-        url: "https://vercel.com",
-        color: "var(--tx)",
+        name: 'Vercel',
+        role: 'Hosting',
+        url: 'https://vercel.com',
+        color: 'var(--tx)',
         Icon: IconVercel,
       },
     ],
   },
-];
+]
 
-export const Route = createFileRoute("/about")({
+export const Route = createFileRoute('/about')({
   head: ({ match }) => ({
     meta: [
-      { title: `About — ${match.context.brand.name}` },
+      { title: `About — ${match.context.brand.host}` },
       {
-        name: "description",
-        content: `About ${match.context.brand.name} and the open-source stack that powers it.`,
+        name: 'description',
+        content: `About ${match.context.brand.host} and the open-source stack that powers it.`,
       },
     ],
   }),
   component: About,
-});
+})
 
 function About() {
-  const brand = useBrand();
-  const others = Object.values(BRANDS).filter((b) => b.id !== brand.id);
+  const brand = useBrand()
+  const others = Object.values(BRANDS).filter((b) => b.id !== brand.id)
   return (
     <div className="pb-14">
       <section className="relative overflow-hidden px-6.5 pt-17.5 pb-5 text-center">
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background:
-              "radial-gradient(700px 320px at 50% -10%,var(--heroglow),transparent 70%)",
+            background: 'radial-gradient(700px 320px at 50% -10%,var(--heroglow),transparent 70%)',
           }}
         />
         <div className="relative mx-auto max-w-[680px]">
@@ -178,7 +177,7 @@ function About() {
             {others.map((b) => (
               <a
                 key={b.id}
-                href={`https://${b.domain}`}
+                href={`https://${b.host}`}
                 target="_blank"
                 rel="noreferrer"
                 className="group border-bd bg-card hover:border-acc shadow-card flex items-center gap-3.5 rounded-lg border px-4.5 py-3.5 transition-colors"
@@ -188,11 +187,9 @@ function About() {
                 </span>
                 <span className="flex flex-col">
                   <span className="text-tx group-hover:text-acc2 font-sans text-[14px] font-semibold transition-colors">
-                    {b.name}.dev
+                    {b.host}
                   </span>
-                  <span className="text-fai font-sans text-[12px]">
-                    {b.language} packages
-                  </span>
+                  <span className="text-fai font-sans text-[12px]">{b.language} packages</span>
                 </span>
                 <IconExternalLink
                   size={13}
@@ -219,19 +216,19 @@ function About() {
         ))}
       </section>
     </div>
-  );
+  )
 }
 
 type TechTileProps = {
-  tech: Tech;
-};
+  tech: Tech
+}
 
 const TechTile = ({ tech }: TechTileProps) => (
   <a
     href={tech.url}
     target="_blank"
     rel="noreferrer"
-    style={{ "--brand": tech.color } as React.CSSProperties}
+    style={{ '--brand': tech.color } as React.CSSProperties}
     className="group border-bd bg-card hover:border-acc shadow-card relative flex flex-col items-center gap-3.5 rounded-lg border px-4 py-7 transition-colors"
   >
     <span className="text-fai absolute top-2.5 right-2.5 opacity-0 transition-opacity group-hover:opacity-100">
@@ -257,9 +254,7 @@ const TechTile = ({ tech }: TechTileProps) => (
       <span className="text-tx2 group-hover:text-tx font-sans text-[13.5px] font-semibold transition-colors">
         {tech.name}
       </span>
-      <span className="text-fai font-sans text-[11.5px] font-medium">
-        {tech.role}
-      </span>
+      <span className="text-fai font-sans text-[11.5px] font-medium">{tech.role}</span>
     </span>
   </a>
-);
+)

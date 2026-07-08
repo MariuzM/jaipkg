@@ -1,17 +1,26 @@
 import { createIsomorphicFn } from '@tanstack/react-start'
 import { getRequestHost } from '@tanstack/react-start/server'
 
-import type { BrandId } from './brands'
-import { brandIdFromHost, DEFAULT_BRAND_ID, envBrandId } from './brands'
+import type { BrandId, HostResolution } from './brands'
+import { DEFAULT_BRAND_ID, envBrandId, resolveHost } from './brands'
 
-export const getBrandId = createIsomorphicFn()
-  .server((): BrandId => {
+export const getHostResolution = createIsomorphicFn()
+  .server((): HostResolution => {
     const env = envBrandId()
-    if (env) return env
+    if (env) return { kind: 'brand', brandId: env }
     try {
-      return brandIdFromHost(getRequestHost())
+      return resolveHost(getRequestHost())
     } catch {
-      return DEFAULT_BRAND_ID
+      return { kind: 'landing' }
     }
   })
-  .client((): BrandId => envBrandId() ?? brandIdFromHost(window.location.host))
+  .client((): HostResolution => {
+    const env = envBrandId()
+    if (env) return { kind: 'brand', brandId: env }
+    return resolveHost(window.location.host)
+  })
+
+export const getBrandId = (): BrandId => {
+  const r = getHostResolution()
+  return r.kind === 'landing' ? DEFAULT_BRAND_ID : r.brandId
+}

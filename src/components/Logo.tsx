@@ -18,8 +18,8 @@ export const Logo = () => {
         {brand.letter}
       </div>
       <span className="text-tx font-sans text-[15px] font-bold tracking-[-0.02em]">
-        {brand.name}
-        <span className="text-fai font-semibold">.dev</span>
+        {brand.wordmark}
+        <span className="text-fai font-semibold">{brand.host.slice(brand.wordmark.length)}</span>
       </span>
     </Link>
   )
