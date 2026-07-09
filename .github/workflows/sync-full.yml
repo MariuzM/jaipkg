@@ -15,22 +15,34 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        brand: [jai, odin]
+        include:
+          - { brand: jai }
+          - { brand: odin, part: 1, parts: 6 }
+          - { brand: odin, part: 2, parts: 6 }
+          - { brand: odin, part: 3, parts: 6 }
+          - { brand: odin, part: 4, parts: 6 }
+          - { brand: odin, part: 5, parts: 6 }
+          - { brand: odin, part: 6, parts: 6 }
     steps:
-      - name: Trigger full refresh for ${{ matrix.brand }}
+      - name: Trigger full refresh for ${{ matrix.brand }} ${{ matrix.part }}
         env:
           SYNC_URL: ${{ secrets.SYNC_URL }}
           SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
           BRAND: ${{ matrix.brand }}
+          PART: ${{ matrix.part }}
+          PARTS: ${{ matrix.parts }}
         run: |
           if [ -z "$SYNC_URL" ] || [ -z "$SYNC_SECRET" ]; then
             echo "SYNC_URL and SYNC_SECRET repository secrets must be set." >&2
             exit 1
           fi
           target="$SYNC_URL?full=1&brand=$BRAND"
+          if [ -n "$PART" ]; then
+            target="$target&part=$PART&parts=$PARTS"
+          fi
           echo "Triggering $target"
           http_code=$(curl -sS -o /tmp/sync-out.json -w "%{http_code}" \
-            --max-time 800 \
+            --max-time 300 \
             -X POST "$target" \
             -H "Authorization: Bearer $SYNC_SECRET" \
             -H "Content-Type: application/json")
