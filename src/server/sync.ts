@@ -105,10 +105,13 @@ const fmtDate = (d: Date) => d.toISOString().slice(0, 10)
 
 const GITHUB_HISTORY_START = new Date('2008-01-01')
 
+const MAX_TRANSIENT_RETRIES = 5
+
 const withRateLimit = async <T>(
   fn: () => Promise<T>,
   onProgress?: (msg: string) => void,
 ): Promise<T> => {
+  let transientRetries = 0
   for (;;) {
     try {
       return await fn()
@@ -119,6 +122,15 @@ const withRateLimit = async <T>(
           : 60_000
         onProgress?.(
           `Rate limited — waiting ${Math.round(waitMs / 1000)}s (set GITHUB_TOKEN to speed this up)...`,
+        )
+        await sleep(waitMs)
+        continue
+      }
+      if (isGhError(e) && e.status >= 500 && transientRetries < MAX_TRANSIENT_RETRIES) {
+        transientRetries += 1
+        const waitMs = Math.min(1000 * 2 ** transientRetries, 30_000)
+        onProgress?.(
+          `GitHub ${e.status} — retry ${transientRetries}/${MAX_TRANSIENT_RETRIES} in ${Math.round(waitMs / 1000)}s...`,
         )
         await sleep(waitMs)
         continue
