@@ -34,8 +34,6 @@ export const Route = createFileRoute('/api/sync')({
           : Number.isFinite(daysParam) && daysParam > 0
             ? daysParam
             : 2
-        const part = Number(url.searchParams.get('part')) || undefined
-        const parts = Number(url.searchParams.get('parts')) || undefined
 
         running = true
         try {
@@ -44,20 +42,12 @@ export const Route = createFileRoute('/api/sync')({
           for (const brand of brands) {
             counts[brand.id] = await syncPackages(
               brand,
-              full ? { fetchVersions: false, part, parts } : { sinceDays },
+              full ? { fetchVersions: false } : { sinceDays },
             )
           }
           const count = Object.values(counts).reduce((a, b) => a + b, 0)
           lastRunAt = new Date().toISOString()
-          return json({
-            ok: true,
-            count,
-            counts,
-            sinceDays: sinceDays ?? null,
-            part: part ?? null,
-            parts: parts ?? null,
-            lastRunAt,
-          })
+          return json({ ok: true, count, counts, sinceDays: sinceDays ?? null, lastRunAt })
         } catch (e) {
           return json({ error: e instanceof Error ? e.message : 'sync failed' }, 500)
         } finally {

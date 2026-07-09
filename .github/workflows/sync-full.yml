@@ -12,41 +12,18 @@ concurrency:
 jobs:
   full:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - { brand: jai }
-          - { brand: odin, part: 1, parts: 6 }
-          - { brand: odin, part: 2, parts: 6 }
-          - { brand: odin, part: 3, parts: 6 }
-          - { brand: odin, part: 4, parts: 6 }
-          - { brand: odin, part: 5, parts: 6 }
-          - { brand: odin, part: 6, parts: 6 }
+    timeout-minutes: 30
     steps:
-      - name: Trigger full refresh for ${{ matrix.brand }} ${{ matrix.part }}
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run full sync
         env:
-          SYNC_URL: ${{ secrets.SYNC_URL }}
-          SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
-          BRAND: ${{ matrix.brand }}
-          PART: ${{ matrix.part }}
-          PARTS: ${{ matrix.parts }}
-        run: |
-          if [ -z "$SYNC_URL" ] || [ -z "$SYNC_SECRET" ]; then
-            echo "SYNC_URL and SYNC_SECRET repository secrets must be set." >&2
-            exit 1
-          fi
-          target="$SYNC_URL?full=1&brand=$BRAND"
-          if [ -n "$PART" ]; then
-            target="$target&part=$PART&parts=$PARTS"
-          fi
-          echo "Triggering $target"
-          http_code=$(curl -sS -o /tmp/sync-out.json -w "%{http_code}" \
-            --max-time 300 \
-            -X POST "$target" \
-            -H "Authorization: Bearer $SYNC_SECRET" \
-            -H "Content-Type: application/json")
-          echo "HTTP $http_code"
-          cat /tmp/sync-out.json
-          echo
-          [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+          SYNC_VERSIONS: '0'
+        run: bun run scripts/sync.ts

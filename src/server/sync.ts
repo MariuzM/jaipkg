@@ -75,8 +75,6 @@ export type SyncOptions = {
   delayMs?: number
   fetchVersions?: boolean
   sinceDays?: number
-  part?: number
-  parts?: number
   onProgress?: (msg: string) => void
 }
 
@@ -99,22 +97,13 @@ const runPool = async <T>(
 const isGhError = (e: unknown): e is GhError =>
   e instanceof Error && typeof (e as GhError).status === 'number'
 
-type CollectOpts = Required<Omit<SyncOptions, 'onProgress' | 'sinceDays' | 'part' | 'parts'>> & {
+type CollectOpts = Required<Omit<SyncOptions, 'onProgress' | 'sinceDays'>> & {
   onProgress?: (msg: string) => void
 }
 
 const fmtDate = (d: Date) => d.toISOString().slice(0, 10)
 
 const GITHUB_HISTORY_START = new Date('2008-01-01')
-
-const partitionWindow = (part: number, parts: number): { from: Date; to: Date } => {
-  const startMs = GITHUB_HISTORY_START.getTime()
-  const endMs = Date.now()
-  const span = (endMs - startMs) / parts
-  const from = new Date(startMs + span * (part - 1))
-  const to = new Date(part === parts ? endMs : startMs + span * part - 86_400_000)
-  return { from, to }
-}
 
 const MAX_TRANSIENT_RETRIES = 5
 
@@ -215,8 +204,6 @@ export const syncPackages = async (
     delayMs = process.env.GITHUB_TOKEN ? 300 : 2500,
     fetchVersions = Boolean(process.env.GITHUB_TOKEN),
     sinceDays,
-    part,
-    parts,
     onProgress,
   }: SyncOptions = {},
 ): Promise<number> => {
@@ -224,22 +211,13 @@ export const syncPackages = async (
   if (!db) throw new Error('DATABASE_URL is not set')
 
   const since = sinceDays && sinceDays > 0 ? new Date(Date.now() - sinceDays * 86_400_000) : null
-  const window =
-    parts && parts > 1 && part && part >= 1 && part <= parts
-      ? partitionWindow(part, parts)
-      : null
 
   const opts: CollectOpts = { perPage, maxPagesPerQuery, delayMs, fetchVersions, onProgress }
 
   const collected = new Map<number, Package>()
   for (const query of brand.discoveryQueries) {
-    if (window) {
-      await collectDateRange(query, window.from, window.to, collected, opts)
-    } else if (since) {
-      await collectQuery(`${query} pushed:>=${fmtDate(since)}`, collected, opts)
-    } else {
-      await collectQuery(query, collected, opts)
-    }
+    const scoped = since ? `${query} pushed:>=${fmtDate(since)}` : query
+    await collectQuery(scoped, collected, opts)
   }
 
   const list = [...collected.values()]
